@@ -41,5 +41,3 @@ Usé la base del curso y sus funciones de seguridad.py. Consulté la [documentac
 | `app.py`, `cargar_inventario` | Añadí avisos para el archivo ausente y el JSON inválido. La prueba 9 intenta consultar y modificar en ambos casos y después recupera el respaldo. |
 | `pruebas.py` | Añadí el script que ejecuta los casos 2 a 9 en copias temporales e imprime el nombre del estudiante. En el apartado 10 también ejecuté el programa desde una copia del repositorio. |
 | `.gitignore` y `README.md` | Añadí reglas para excluir el entorno virtual, la caché de Python y los temporales. Actualicé las instrucciones para instalar, ejecutar y probar el programa. |
-
-Usé OpenAI Codex para revisar los cambios y preparar las pruebas. Una sugerencia fue revisar los permisos dentro de la función que modifica el inventario. La comprobé con la llamada directa de la prueba 4.
