@@ -6,7 +6,7 @@ _hasher = PasswordHasher(time_cost=2, memory_cost=19456, parallelism=1)
 
 
 def crear_hash(clave):
-    # La biblioteca genera automáticamente un salt aleatorio.
+    #La biblioteca genera el salt.
     return _hasher.hash(clave)
 
 
