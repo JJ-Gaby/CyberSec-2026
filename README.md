@@ -27,17 +27,18 @@ Usé la base del curso y sus funciones de seguridad.py. Consulté la [documentac
 
 ## Cambios que hice a la base
 
-| Dónde | Qué cambié y cómo lo comprobé |
-|---|---|
-| `migrar_usuarios.py` y `usuarios.json` | Añadí `migrar` para reemplazar el campo `clave` de las dos cuentas por un hash Argon2id. En la prueba 2 comprobé que cada contraseña funciona con su hash y que el campo anterior ya no aparece. |
-| `seguridad.py` y `requirements.txt` | Usé las funciones de la base para crear y verificar los hashes. En `seguridad.py` solo acorté el comentario sobre el salt. La dependencia argon2-cffi ya venía en la base. |
-| `app.py`, `autenticar` y `main` | Añadí la verificación del hash y el registro de cada intento. El menú muestra la opción de modificar a admin y oculta la contraseña al escribirla en la terminal. La prueba 3 comprueba cuándo aparece el menú. |
-| `app.py`, `consultar_inventario` y `modificar_cantidad` | Comprobé la sesión dentro de ambas funciones y exigí el rol admin para escribir. En la prueba 4, user pidió cambiar P001 a 99 directamente desde un script. El archivo siguió igual. También probé ambas funciones sin sesión. |
-| `app.py`, `validar_cantidad` y `modificar_cantidad` | Añadí la validación antes de guardar y un aviso cuando el ID no existe. La prueba 5 revisa cinco entradas inválidas y los límites 0 y 1000. La prueba 6 comprueba que P999 no cambia ningún producto. |
-| `app.py`, `guardar_inventario`, e `inventario.json` | Cambié la escritura para guardar primero en un temporal. En el inventario final, P001 pasó de 10 a 20. La prueba 7 abre el programa de nuevo y lee las 20 unidades. |
-| `app.py`, `registrar_evento`, y `auditoria.jsonl` | Añadí un registro por línea con la fecha y hora, el usuario, la acción y el resultado. Para los cambios incluí el producto y las dos cantidades. La muestra contiene eventos reales de las pruebas. La prueba 8 comprueba los cuatro tipos de evento pedidos. |
-| `app.py`, `cargar_inventario` | Añadí avisos para el archivo ausente y el JSON inválido. La prueba 9 intenta consultar y modificar en ambos casos y después recupera el respaldo. |
-| `pruebas.py` | Añadí el script que ejecuta los casos 2 a 9 en copias temporales e imprime el nombre del estudiante. En el apartado 10 también ejecuté el programa desde una copia del repositorio. |
-| `.gitignore` y `README.md` | Añadí reglas para excluir el entorno virtual, la caché de Python y los temporales. Actualicé las instrucciones para instalar, ejecutar y probar el programa. |
+| Cambio | Dónde | Función | Resultado |
+|---|---|---|---|
+| Cambié como se guardan las contraseñas. | `migrar_usuarios.py` y `usuarios.json` | `migrar` usa `crear_hash` para guardar un hash de cada contraseña. | Verifiqué que pude entrar con las dos cuentas. El campo `clave` ya no aparece en el archivo. |
+| Añadí una revisión de la contraseña al entrar. | `app.py` | `autenticar` usa `verificar_clave` para revisar la contraseña. | Verifiqué que una clave incorrecta y un usuario que no existe dan el mismo mensaje. En los dos casos vi “Credenciales incorrectas.” y el menú no apareció. |
+| Cambié las opciones del menú según la cuenta. | `app.py` | `main` muestra las opciones que tiene cada usuario. | Con `admin` vi la opción de cambiar cantidades. Con `user` pude ver los productos. Al cerrar sesión, el programa me pidió el usuario otra vez. |
+| Hice que fuera necesario iniciar sesión para ver el inventario. | `app.py` | `consultar_inventario` revisa si hay una sesión abierta. | Verifiqué que pude ver los productos con `admin` y con `user`. Sin sesión, el programa no mostró la lista. |
+| Dejé que solo `admin` pudiera cambiar cantidades. | `app.py` | `modificar_cantidad` revisa el permiso antes de guardar. | Verifiqué que el programa rechazó el cambio de P001 a 99 con `user` y también sin sesión. En los dos casos P001 siguió en 10. |
+| Puse un límite a las cantidades. | `app.py` | `validar_cantidad` acepta números enteros de 0 a 1000. | Verifiqué que el programa aceptó 0 y 1000. Rechazó `-1`, `1001`, `abc`, `2.5` y la entrada vacía. Después de cada rechazo, el archivo quedó igual. |
+| Añadí un aviso para los productos que no existen. | `app.py` | `modificar_cantidad` busca el producto por su ID. | Cambié P001 de 10 a 20. Después verifiqué que al usar P999 apareció “Producto inexistente.” y P001 siguió en 20. |
+| Cambié como se guarda el inventario. | `app.py` e `inventario.json` | `guardar_inventario` guarda los datos primero en un archivo temporal y luego reemplaza el inventario. | Cerré el programa y lo abrí de nuevo. Vi que P001 todavía tenía 20 unidades. |
+| Añadí un historial de accesos y cambios. | `app.py` y `auditoria.jsonl` | `registrar_evento` guarda quién hizo el intento, a qué hora y qué pasó. | En el archivo vi un acceso correcto, un acceso fallido, el cambio que hizo `admin` y el intento que se le rechazó a `user`. |
+| Añadí avisos cuando hay un problema con el archivo. | `app.py` | `cargar_inventario` avisa si falta el archivo o si no puede leer los datos. | Al quitar el archivo, verifiqué que el programa no creó otro. Cuando escribí `ESTO NO ES JSON`, el texto quedó igual. Al restaurar la copia, pude ver los productos otra vez. |
+| Añadí pruebas con copias del inventario. | `pruebas.py` | `ejecutar` prepara una copia y `probar` ejecuta los casos. | Las pruebas pasaron y mi nombre apareció en la terminal. |
 
 Formato de codigo hecho con IA Copilot
