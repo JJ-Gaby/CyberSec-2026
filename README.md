@@ -41,4 +41,4 @@ Usé la base del curso y sus funciones de seguridad.py. Consulté la [documentac
 | Añadí avisos cuando hay un problema con el archivo. | `app.py` | `cargar_inventario` avisa si falta el archivo o si no puede leer los datos. | Al quitar el archivo, verifiqué que el programa no creó otro. Cuando escribí `ESTO NO ES JSON`, el texto quedó igual. Al restaurar la copia, pude ver los productos otra vez. |
 | Añadí pruebas con copias del inventario. | `pruebas.py` | `ejecutar` prepara una copia y `probar` ejecuta los casos. | Las pruebas pasaron y mi nombre apareció en la terminal. |
 
-Formato de codigo hecho con IA Copilot
+Formato de codigo hecho con Claude.
