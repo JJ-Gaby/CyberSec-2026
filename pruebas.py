@@ -9,6 +9,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 
+#Abro otro proceso para probar el menú y comprobar qué queda guardado después de cerrar el programa.
 def cli(carpeta, nombre, *entradas):
     proceso = subprocess.run(
         [sys.executable, "app.py"], cwd=carpeta,
@@ -19,6 +20,7 @@ def cli(carpeta, nombre, *entradas):
     return proceso.stdout
 
 
+#Las pruebas empiezan con P001 en 10 y comparan el archivo antes y después de cada cambio rechazado.
 def probar(carpeta, nombre, destino_log=None):
     from seguridad import verificar_clave
 
@@ -136,6 +138,7 @@ def probar(carpeta, nombre, destino_log=None):
     print("Respaldo restaurado | consulta correcta")
 
 
+#Copio el programa y los datos en una carpeta temporal para probar errores sin tocar el inventario de entrega.
 def ejecutar(nombre, destino_log=None):
     with TemporaryDirectory() as temporal:
         carpeta = Path(temporal)
@@ -146,4 +149,3 @@ def ejecutar(nombre, destino_log=None):
 
 if __name__ == "__main__":
     ejecutar(input("Nombre del estudiante: "))
-

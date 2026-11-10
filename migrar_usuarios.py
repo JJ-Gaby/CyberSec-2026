@@ -4,6 +4,7 @@ from pathlib import Path
 from seguridad import crear_hash
 
 
+#Solo convierto las cuentas que aún tienen clave. Así puedo repetir la migración sin cambiar sus hashes.
 def migrar(ruta):
     usuarios = json.loads(ruta.read_text(encoding="utf-8"))
     if not any("clave" in usuario for usuario in usuarios):
@@ -18,4 +19,3 @@ def migrar(ruta):
 
 if __name__ == "__main__":
     migrar(Path(__file__).resolve().with_name("usuarios.json"))
-

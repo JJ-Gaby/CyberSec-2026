@@ -13,6 +13,7 @@ USUARIOS = RAIZ / "usuarios.json"
 LOG = RAIZ / "auditoria.jsonl"
 
 
+#Si el archivo falta o está dañado, el aviso permite volver al menú y restaurar el respaldo.
 def cargar_inventario():
     try:
         return json.loads(DATOS.read_text(encoding="utf-8"))
@@ -23,6 +24,7 @@ def cargar_inventario():
     return None
 
 
+#Primero escribo la lista completa en un temporal para conservar el inventario durante la escritura.
 def guardar_inventario(productos):
     temporal = DATOS.with_suffix(".tmp")
     texto = json.dumps(productos, indent=2, ensure_ascii=False)
@@ -30,6 +32,7 @@ def guardar_inventario(productos):
     temporal.replace(DATOS)
 
 
+#Cada línea guarda un evento. En un rechazo, nueva es la cantidad que se pidió.
 def registrar_evento(usuario, accion, resultado, *, producto=None,
                      anterior=None, nueva=None):
     evento = {"fecha_hora": datetime.now(timezone.utc).isoformat(),
@@ -40,6 +43,7 @@ def registrar_evento(usuario, accion, resultado, *, producto=None,
         archivo.write(json.dumps(evento, ensure_ascii=False) + "\n")
 
 
+#Verifico el hash guardado y uso el mismo aviso para un usuario desconocido y una clave incorrecta.
 def autenticar(nombre, clave):
     usuarios = json.loads(USUARIOS.read_text(encoding="utf-8"))
     for usuario in usuarios:
@@ -51,6 +55,7 @@ def autenticar(nombre, clave):
     return None
 
 
+#Compruebo la sesión aquí porque también se puede consultar desde otro script.
 def consultar_inventario(sesion):
     if not sesion or sesion.get("rol") not in ("admin", "user"):
         print("Se requiere una sesión válida.")
@@ -63,6 +68,7 @@ def consultar_inventario(sesion):
     return True
 
 
+#Quito los ceros iniciales antes de revisar el largo. Tanto 0 como 1000 son válidos.
 def validar_cantidad(entrada):
     texto = str(entrada).strip()
     if not texto.isascii() or not texto.isdecimal():
@@ -74,6 +80,7 @@ def validar_cantidad(entrada):
     return cantidad if cantidad <= 1000 else None
 
 
+#Compruebo el rol dentro de la función. Si falta permiso, leo la cantidad anterior para registrar el intento.
 def modificar_cantidad(sesion, identificador, entrada):
     cantidad = validar_cantidad(entrada)
     if not sesion or sesion.get("rol") != "admin":
@@ -107,6 +114,7 @@ def modificar_cantidad(sesion, identificador, entrada):
     return False
 
 
+#En la terminal oculto la clave. Las pruebas envían las entradas al programa desde otro proceso.
 def main():
     print("Inventario académico")
     print("Estudiante:", input("Escriba su nombre: "))
@@ -140,4 +148,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
